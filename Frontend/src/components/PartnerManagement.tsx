@@ -4,17 +4,20 @@ import axios from 'axios';
 import { DeliveryPartner } from '../types/partner';
 import { host } from '../apiRoutes';
 import PartnerForm from './partnerForm';
+import { usePartnerStore } from '../store/partnerStore';
 
 const PartnerManagement = () => {
   const [partners, setPartners] = useState<DeliveryPartner[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [formOpen,setFormOpen] = useState<boolean>(false)
+  const {setDeliveryPartners}=usePartnerStore();
   // Fetch partners from API
   const fetchPartners = async () => {
     setLoading(true);
     try {
       const response = await axios.get(`${host}/api/partners`);
       setPartners(response.data.partners);
+      setDeliveryPartners(response.data.partners)
     } catch (error) {
       console.error('Error fetching partners:', error);
     } finally {

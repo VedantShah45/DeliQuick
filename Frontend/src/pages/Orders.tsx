@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import React, { useState } from 'react';
-import OrdersMap from '../components/Map';
+// import OrdersMap from '../components/Map';
+import { Order } from '../types/partner';
+import AddOrderForm from '../components/OrderForm';
 
 const PageProps = {
   orders: [
@@ -40,7 +42,8 @@ const PageProps = {
 };
 
 export default function Orders() {
-  const { filters, orders } = PageProps;
+  const [showForm,setShowForm]=useState<Boolean>(false);
+  const { orders,filters} = PageProps;
   const [openAccordion, setOpenAccordion] = useState(null);
 
   const toggleAccordion = (id:any) => {
@@ -80,12 +83,20 @@ export default function Orders() {
           </div>
         </div>
       </div>
-
+      <div className="mb-6">
+        <button
+          onClick={()=>setShowForm(!showForm)}
+          className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
+        >
+          {showForm ? 'Cancel' : 'Add Order'}
+        </button>
+      </div>
+      {showForm && <AddOrderForm/>}        
       {/* Orders List Section */}
       <div className="bg-white shadow-md rounded-lg p-4">
         <h2 className="text-lg font-semibold mb-4 text-gray-800">Orders</h2>
         <ul className="space-y-4">
-          {orders.map((order) => (
+          {orders?.map((order) => (
             <li
               key={order._id}
               className="p-4 border border-gray-200 rounded"
@@ -130,7 +141,7 @@ export default function Orders() {
           ))}
         </ul>
       </div>
-      <OrdersMap orders={orders} />
+      {/* <OrdersMap orders={orders} /> */}
     </div>
   );
 }

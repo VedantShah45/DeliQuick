@@ -18,7 +18,7 @@ export const getAllOrders=async(req,res)=>{
 export const assignOrder = async (req, res) => {
     try {
         const {
-            OrderNumber,
+            orderNumber,
             customer,
             area,
             items,
@@ -30,13 +30,13 @@ export const assignOrder = async (req, res) => {
         } = req.body;
 
         // Validate required fields
-        if (!OrderNumber || !customer || !items || !status) {
+        if (!orderNumber || !customer || !items || !status) {
             return res.status(400).json({ message: 'Missing required fields' });
         }
 
         // Create a new order
         const newOrder = new OrderModel({
-            OrderNumber,
+            orderNumber,
             customer,
             area,
             items,

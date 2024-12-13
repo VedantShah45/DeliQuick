@@ -16,7 +16,7 @@ export type DeliveryPartner = {
       completedOrders: number;
       cancelledOrders: number;
     };
-  };
+};
 
 export type Assignment = {
   orderId: string; partnerId:

@@ -9,7 +9,7 @@ export default function Sidebar() {
       <button onClick={()=>navigation('/')}  className="mb-4 px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition">
         Home
       </button>
-      <button className="mb-4 px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition">
+      <button onClick={()=>navigation('/partners')}  className="mb-4 px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition">
         Partners
       </button>
       <button onClick={()=>navigation('/orders')} className="mb-4 px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600 transition">

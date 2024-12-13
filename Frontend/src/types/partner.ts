@@ -17,6 +17,13 @@ export type DeliveryPartner = {
       cancelledOrders: number;
     };
   };
+
+export type Assignment = {
+  orderId: string; partnerId:
+  string; timeStamp: Date;
+  status: 'success' | 'failed';
+  reason?: string;
+} 
   
 export type Order = {
     _id: string;

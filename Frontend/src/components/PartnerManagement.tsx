@@ -5,21 +5,26 @@ import { DeliveryPartner } from '../types/partner';
 import { host } from '../apiRoutes';
 import PartnerForm from './partnerForm';
 import { usePartnerStore } from '../store/partnerStore';
+import { useOrderStore } from '../store/orderStore';
+import { useAssignmentStore } from '../store/assignmentStore';
 
 const PartnerManagement = () => {
   const [partners, setPartners] = useState<DeliveryPartner[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [formOpen,setFormOpen] = useState<boolean>(false)
-  const {setDeliveryPartners}=usePartnerStore();
+  const {setDeliveryPartners,deliveryPartners}=usePartnerStore();
+  const {setOrders}=useOrderStore();
+  const {setAssignments}=useAssignmentStore();
   // Fetch partners from API
   const fetchPartners = async () => {
     setLoading(true);
     try {
       const response = await axios.get(`${host}/api/partners`);
       setPartners(response.data.partners);
+      // console.log(response.data.partners);      
       setDeliveryPartners(response.data.partners)
     } catch (error) {
-      console.error('Error fetching partners:', error);
+      console.log('Error fetching partners:', error);
     } finally {
       setLoading(false);
     }
@@ -31,7 +36,7 @@ const PartnerManagement = () => {
       await axios.delete(`${host}/api/partners/${id}`);
       setPartners(partners.filter((partner) => partner._id !== id));
     } catch (error) {
-      console.error('Error deleting partner:', error);
+      console.log('Error deleting partner:', error);
     }
   };
 
@@ -45,12 +50,34 @@ const PartnerManagement = () => {
       setPartners([...partners, response.data.partner]);
       setFormOpen(false)
     } catch (error) {
-      console.error('Error adding partner:', error);
+      console.log('Error adding partner:', error);
     }
   };
 
+  const fetchOrders = async () => {
+    try {
+      const response = await axios.get(`${host}/api/orders`);
+      console.log(response.data);
+      setOrders(response.data.orders);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchAssignments=async()=>{
+    try {
+      const response = await axios.get(`${host}/api/assignments`);
+      console.log("Assignments ",response.data.assignments);
+      setAssignments(response.data.assignments);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     fetchPartners();
+    fetchOrders();
+    fetchAssignments();
   }, []);
 
   if (loading) {

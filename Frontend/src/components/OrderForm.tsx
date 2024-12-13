@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import { assignDeliveryPartnerToOrder } from '../Helper/partnerAssignment';
+import React, { useEffect, useState } from 'react';
+import { assignDeliveryPartnerToOrder, getLatLngFromAddress } from '../Helper/partnerAssignment';
 import axios from 'axios';
 import { host } from '../apiRoutes';
 import { usePartnerStore } from '../store/partnerStore';
+import { ToastContainer, toast } from 'react-toastify';
 
 export type Order = {
   _id: string;
@@ -23,9 +24,10 @@ export type Order = {
 };
 
 const AddOrderForm = () => {
-  const {deliveryPartners}=usePartnerStore();  
+  const {deliveryPartners,setDeliveryPartners}=usePartnerStore();  
   const [showModal, setShowModal] = useState(false);
   const [partnerDetails, setPartnerDetails] = useState<any>(null);
+  const [partnerCoords,setPartnerCoords]=useState<Record<string, { lat: number; lng: number }>>();
 
   // Mock Delivery Partner Data with string addresses
 //   const deliveryPartners = [
@@ -35,14 +37,14 @@ const AddOrderForm = () => {
 //   ];
 
   // Mock order coordinates (This would typically come from the form)
-  const orderCoords = { lat: 19.0760, lng: 72.8777 }; // Example coordinates for the order
+  const orderCoords = { lat: 19.2403, lng: 73.1305 }; // Example coordinates for the order
 
   // Mock positions of partners
-  const partnerPositions = {
-    partner_1: { lat: 19.1070, lng: 72.8877 },
-    partner_2: { lat: 19.1260, lng: 72.8760 },
-    partner_3: { lat: 19.0500, lng: 72.8500 },
-  };
+  // const partnerPositions = {
+  //   partner_1: { lat: 19.1070, lng: 72.8877 },
+  //   partner_2: { lat: 19.1260, lng: 72.8760 },
+  //   partner_3: { lat: 19.0500, lng: 72.8500 },
+  // };
 
 
   const [order, setOrder] = useState<Order>({
@@ -118,29 +120,87 @@ const AddOrderForm = () => {
   };
 
   const handleSubmit = async(e: React.FormEvent) => {
-    e.preventDefault();
-
+    e.preventDefault();  
     // Calculate the best partner for the order
-    const result = assignDeliveryPartnerToOrder(orderCoords, partnerPositions, deliveryPartners);
-
-    if (result.partnerId) {
-      console.log(result);      
+    const result = assignDeliveryPartnerToOrder(orderCoords, partnerCoords!, deliveryPartners);
+    if (result.partnerId) {    
       setPartnerDetails({...result});
       setShowModal(true); // Show the modal with the partner details
     }
     order.assignedTo=result.partnerId!
-    console.log(order);   
 
-    // try {
-    //     const response=await axios.post(`${host}/api/orders/assign`,order)
-    //     console.log(response.data);  
-    // } catch (error) {
-    //     console.log(error);        
-    // }   
+    try {
+      const response = await axios.post(`${host}/api/orders/assign`, order);
+      console.log(response.data);      
+      const assignment={
+        partnerId: result.partnerId,
+        orderId:response.data.order._id,
+      }
+      const posted= await axios.post(`${host}/api/assignments/run`,assignment)
+      if(!posted){
+        console.log("Assignment Not Posted");        
+      }
+      else console.log("Assignment Created ",posted.data)
+      let idx;
+      console.log(response.data);
+      if (response.data) {
+        try {
+          // Find the partner and its index
+          const delPartner = deliveryPartners.find((partner, index) => {
+            if (partner._id === result.partnerId) {
+              idx = index;
+              return true;
+            }
+            return false;
+          });
+    
+          if (delPartner) {
+            // Increment the currentLoad attribute of the partner
+            const updatedPartners = [...deliveryPartners];
+            updatedPartners[idx!] = {
+              ...delPartner,
+              currentLoad: delPartner.currentLoad + 1,
+            };
+    
+            // Update Zustand state
+            setDeliveryPartners(updatedPartners);
+    
+            // Update the partner in the backend
+            const patchResponse = await axios.patch(
+              `${host}/api/partners/${result.partnerId}`,
+              {
+                currentLoad: updatedPartners[idx!].currentLoad,
+              }
+            );
+            console.log("Partner Edited: ", patchResponse.data);
+          } else {
+            console.log("Delivery partner not found");
+          }
+        } catch (error) {
+          console.log(response.data.message + "");
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+    
 
-  };
+  useEffect(()=>{
+    const assignPartnerCoords=async()=>{
+      const partnerCoordsObj: Record<string, { lat: number; lng: number }> = {};     
+      for(const partner of deliveryPartners){
+        const {lat,lng}=await getLatLngFromAddress(partner.areas[0]);
+        partnerCoordsObj[partner._id!]={lat,lng};
+      }
+      setPartnerCoords(partnerCoordsObj)    
+    }
+    assignPartnerCoords();
+  },[deliveryPartners])
 
   return (
+    <div>
+    <ToastContainer />
     <form onSubmit={handleSubmit} className='mb-4'>
       <div className="mb-4">
         <label
@@ -378,7 +438,8 @@ const AddOrderForm = () => {
         )}
       </div>
     </form>
+    </div>
   );
 };
 
-export default AddOrderForm;
+export default AddOrderForm

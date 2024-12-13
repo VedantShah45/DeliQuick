@@ -1,6 +1,8 @@
 import { del } from "framer-motion/client";
 import { DeliveryPartner } from "../types/partner";
 
+const Google_Key = import.meta.env.VITE_GOOGLE_API_KEY;
+
 // Haversine formula to calculate the distance between two coordinates
 export const haversineDistance = (
   coords1: { lat: number; lng: number },
@@ -32,7 +34,7 @@ export const assignDeliveryPartnerToOrder = (
   let bestDriverAddress:string|null=null
 
   // Find the closest available driver
-  for (const driverId in partnerPositions) {
+  for (const driverId in partnerPositions) {  
     const driverCoords = partnerPositions[driverId];
     const driver = availableDrivers.find((d) => d._id === driverId);
   
@@ -51,3 +53,17 @@ export const assignDeliveryPartnerToOrder = (
   // Return the best delivery partner's ID and Name
   return { partnerId: bestDriverId, partnerName: bestDriverName,address:bestDriverAddress };
 };
+
+export  const getLatLngFromAddress = async (address: string) => {
+    const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${Google_Key}`;
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.results.length > 0) {
+      const location = data.results[0].geometry.location;
+      return { lat: location.lat, lng: location.lng };
+    } else {
+      console.error("Geocoding error: No results found");
+      return { lat: 19.076, lng: 72.8777 }; // Default fallback
+    }
+  };

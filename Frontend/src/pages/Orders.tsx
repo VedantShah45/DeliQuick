@@ -1,8 +1,11 @@
 import { motion } from 'framer-motion';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 // import OrdersMap from '../components/Map';
 import { Order } from '../types/partner';
 import AddOrderForm from '../components/OrderForm';
+import axios from 'axios';
+import { host } from '../apiRoutes';
+import { useOrderStore } from '../store/orderStore';
 
 const PageProps = {
   orders: [
@@ -42,12 +45,22 @@ const PageProps = {
 };
 
 export default function Orders() {
-  const [showForm,setShowForm]=useState<Boolean>(false);
-  const { orders,filters} = PageProps;
+  const [showForm, setShowForm] = useState<Boolean>(false);
+  const { filters } = PageProps;
   const [openAccordion, setOpenAccordion] = useState(null);
-
-  const toggleAccordion = (id:any) => {
+  const {orders,setOrders}=useOrderStore()
+  const toggleAccordion = (id: any) => {
     setOpenAccordion((prev) => (prev === id ? null : id));
+  };
+
+  const deleteOrder = async (id: string) => {
+    try {
+      await axios.delete(`${host}/api/orders/${id}`);
+      const newOrders=orders.filter((order)=>order._id!=id)
+      setOrders(newOrders);
+    } catch (error) {
+      console.error('Error deleting order:', error);
+    }
   };
 
   return (
@@ -70,7 +83,10 @@ export default function Orders() {
           {/* Area Filter */}
           <div>
             <label className="block text-gray-600 mb-2 font-medium">Area</label>
-            <input type="text" className='w-full rounded px-3 py-2 border border-gray-300 ' />
+            <input
+              type="text"
+              className="w-full rounded px-3 py-2 border border-gray-300"
+            />
           </div>
           {/* Date Filter */}
           <div>
@@ -85,22 +101,19 @@ export default function Orders() {
       </div>
       <div className="mb-6">
         <button
-          onClick={()=>setShowForm(!showForm)}
+          onClick={() => setShowForm(!showForm)}
           className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition"
         >
           {showForm ? 'Cancel' : 'Add Order'}
         </button>
       </div>
-      {showForm && <AddOrderForm/>}        
+      {showForm && <AddOrderForm />}
       {/* Orders List Section */}
       <div className="bg-white shadow-md rounded-lg p-4">
         <h2 className="text-lg font-semibold mb-4 text-gray-800">Orders</h2>
         <ul className="space-y-4">
           {orders?.map((order) => (
-            <li
-              key={order._id}
-              className="p-4 border border-gray-200 rounded"
-            >
+            <li key={order._id} className="p-4 border border-gray-200 rounded">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div className="mb-3 md:mb-0">
                   <h3 className="font-medium text-gray-800">Order #{order.orderNumber}</h3>
@@ -114,19 +127,29 @@ export default function Orders() {
                     onClick={() => toggleAccordion(order._id)}
                     className="px-4 py-2 mr-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
                   >
-                    {openAccordion === order._id ? "Hide Details" : "View Details"}
+                    {openAccordion === order._id ? 'Hide Details' : 'View Details'}
                   </button>
                   <button
-                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+                    className="px-4 py-2 mr-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
                   >
                     Assign Partner
+                  </button>
+                  <button
+                    onClick={() => deleteOrder(order._id)}
+                    className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+                  >
+                    Delete Order
                   </button>
                 </div>
               </div>
 
               {/* Accordion Section */}
               {openAccordion === order._id && (
-                <motion.div initial={{opacity:0,height:0}} animate={{opacity:1,height:"auto"}} className="mt-4 bg-gray-100 p-4 rounded">
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="mt-4 bg-gray-100 p-4 rounded"
+                >
                   <h4 className="text-gray-800 font-semibold">Order Details</h4>
                   <p className="text-sm text-gray-600">Order ID: {order._id}</p>
                   <p className="text-sm text-gray-600">Order Number: {order.orderNumber}</p>

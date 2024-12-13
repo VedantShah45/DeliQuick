@@ -5,10 +5,11 @@ import { dbConnect } from './Database/connectDB.js';
 import colors from 'colors'
 import partnerRouter from './routes/partnerRoutes.js'
 import orderRouter from './routes/orderRoutes.js'
+import assignmentRouter from './routes/assignmentRoutes.js'
 
 const corsOptions = {
     origin: 'http://localhost:5173', // Specify the allowed origin
-    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Specify allowed HTTP methods
+    methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH'], // Specify allowed HTTP methods
     credentials: true, // Allow cookies to be sent with requests
 };
 
@@ -18,6 +19,7 @@ app.use(express.json());
 
 app.use('/api/partners',partnerRouter)
 app.use('/api/orders',orderRouter)
+app.use('/api/assignments',assignmentRouter)
 
 dbConnect();
 

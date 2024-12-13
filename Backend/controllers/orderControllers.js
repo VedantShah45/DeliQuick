@@ -15,6 +15,22 @@ export const getAllOrders=async(req,res)=>{
     }
 }
 
+export const deleteOrder=async(req,res)=>{
+    try {
+        const id=req.params.id
+        const orders=await OrderModel.findByIdAndDelete(id)
+        res.status(200).json({
+            success:true,
+            orders
+        })
+    } catch (error) {
+        console.log(error);       
+        res.status(500).json({
+            message:"Internal Server Error"
+        }) 
+    }
+}
+
 export const assignOrder = async (req, res) => {
     try {
         const {

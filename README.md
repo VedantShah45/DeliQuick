@@ -26,10 +26,10 @@ Welcome to **DeliQuick**, a robust and efficient **Delivery Fleet Management** s
   - **Cancelled Orders**: Number of cancelled orders, useful for partner performance evaluation.
 
 ## Tech Stack
-- **Frontend**: React.js, TailwindCSS for styling
+- **Frontend**: React.js, Zustand, TailwindCSS 
 - **Backend**: Node.js, Express.js
-- **Database**: MongoDB for storing partner and order data
-- **API**: Google Maps API for real-time order tracking
+- **Database**: MongoDB 
+- **API**: Google Maps API for real-time order tracking, Google Geocoding API for co-ordinate generation 
 - **Haversine Formula**: For calculating optimal distances between order and partner locations
 
 ## Installation
@@ -110,6 +110,3 @@ Contributions are welcome! To contribute, please follow these steps:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
----
-
-Feel free to modify the README as per your project’s specific details and requirements. Let me know if you need further enhancements or sections!

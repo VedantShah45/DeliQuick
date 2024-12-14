@@ -22,9 +22,9 @@ export default function Assignments() {
     Offline: 'bg-red-100 text-red-700',
   };
 
-  const deleteAssn=async(assignmentId: String)=>{
+  const assnStatusUpdate=async(assignmentId: String,status:String)=>{
     try {
-      await axios.delete(`${host}/api/assignments/${assignmentId}`)
+      await axios.patch(`${host}/api/assignments/${assignmentId}`,{status})
       const newAssns=assignments.filter((assn)=>assn._id!=assignmentId)
       setAssignments(newAssns)
       console.log(newAssns);      
@@ -71,7 +71,7 @@ export default function Assignments() {
   const handleComplete = async(assignmentId: String,orderId:String,partnerId:String) => {
     // Logic to mark the assignment as complete
     console.log(`Assignment ${assignmentId} completed`);
-    deleteAssn(assignmentId).then(()=>
+    assnStatusUpdate(assignmentId,"success").then(()=>
       editOrder(orderId,"delivered").then(()=>{
         decLoad(partnerId)
       })
@@ -83,7 +83,7 @@ export default function Assignments() {
   const handleCancel = (assignmentId: string) => {
     // Logic to cancel the assignment
     console.log(`Assignment ${assignmentId} cancelled`);
-    deleteAssn(assignmentId)
+    assnStatusUpdate(assignmentId,"failed")
     // Add your update logic here (e.g., API call or store update)
   };
 

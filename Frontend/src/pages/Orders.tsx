@@ -45,7 +45,7 @@ export default function Orders() {
     console.log(orders);    
     if (Array.isArray(orders.orders)) {
       const updatedFilteredOrders = orders.orders.filter((order) => {
-        const matchesStatus = statusFilter === "All" || statusFilter === order.status; // Dummy "Pending" for demonstration
+        const matchesStatus = statusFilter === "All" || statusFilter.toLowerCase() === order.status; // Dummy "Pending" for demonstration
         const matchesArea = areaFilter === "" || order.customer.address.toLowerCase().includes(areaFilter.toLowerCase());
         // const matchesDate = dateFilter === "" || true; // Update when order.date exists        
         return matchesStatus && matchesArea;

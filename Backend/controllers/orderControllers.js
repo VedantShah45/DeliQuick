@@ -4,6 +4,7 @@ export const getAllOrders=async(req,res)=>{
     try {
         const orders=await OrderModel.find({})
         res.status(200).json({
+            message:"Orders fetched Successfully",
             success:true,
             orders
         })

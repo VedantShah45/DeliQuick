@@ -1,44 +1,14 @@
 import { motion } from 'framer-motion';
 import React, { useEffect, useState } from 'react';
-// import OrdersMap from '../components/Map';
-import { Order } from '../types/partner';
-import AddOrderForm from '../components/OrderForm';
 import axios from 'axios';
+import AddOrderForm from '../components/OrderForm';
 import { host } from '../apiRoutes';
 import { useOrderStore } from '../store/orderStore';
+import { Order } from '../types/partner';
 
 const PageProps = {
-  orders: [
-    {
-      _id: "1",
-      orderNumber: "ORD001",
-      customer: {
-        name: "John Doe",
-        phone: "123-456-7890",
-        address: "Bhiwandi, maharashtra"
-      },
-    },
-    {
-      _id: "2",
-      orderNumber: "ORD002",
-      customer: {
-        name: "Jane Smith",
-        phone: "987-654-3210",
-        address: "Thane west"
-      },
-    },
-    {
-      _id: "3",
-      orderNumber: "ORD003",
-      customer: {
-        name: "Alice Johnson",
-        phone: "456-789-1234",
-        address: "Mulund west, mumbai"
-      },
-    },
-  ],
   filters: {
-    status: ["Pending", "Delivered", "Cancelled"],
+    status: ["All", "Pending", "Delivered", "Cancelled"],
     areas: ["Downtown", "Uptown", "Midtown"],
     date: "2024-12-09",
   },
@@ -46,21 +16,60 @@ const PageProps = {
 
 export default function Orders() {
   const [showForm, setShowForm] = useState<Boolean>(false);
-  const { filters } = PageProps;
   const [openAccordion, setOpenAccordion] = useState(null);
-  const {orders,setOrders}=useOrderStore()
-  const toggleAccordion = (id: any) => {
-    setOpenAccordion((prev) => (prev === id ? null : id));
-  };
+  const { orders, setOrders } = useOrderStore();
 
+  // Filters State
+  const [statusFilter, setStatusFilter] = useState("All");
+  const [areaFilter, setAreaFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState(PageProps.filters.date);
+
+  // State to hold filtered orders
+  const [filteredOrders, setFilteredOrders] = useState<Order[]>([]);
+
+  // Fetch Orders on Mount
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await axios.get(`${host}/api/orders`);
+        setOrders(response.data); // Set initial orders in the store
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+    };
+    fetchOrders();
+  }, [setOrders]);
+
+  // Update filteredOrders whenever orders or filters change
+  useEffect(() => {
+    console.log(orders);    
+    if (Array.isArray(orders.orders)) {
+      const updatedFilteredOrders = orders.orders.filter((order) => {
+        const matchesStatus = statusFilter === "All" || statusFilter === order.status; // Dummy "Pending" for demonstration
+        const matchesArea = areaFilter === "" || order.customer.address.toLowerCase().includes(areaFilter.toLowerCase());
+        // const matchesDate = dateFilter === "" || true; // Update when order.date exists        
+        return matchesStatus && matchesArea;
+      });
+      console.log("Updated filters, ",updatedFilteredOrders);
+      
+      setFilteredOrders(updatedFilteredOrders);
+    }
+  }, [orders, statusFilter, areaFilter, dateFilter]); // Re-run whenever any of these change
+
+  // Delete an Order
   const deleteOrder = async (id: string) => {
     try {
       await axios.delete(`${host}/api/orders/${id}`);
-      const newOrders=orders.filter((order)=>order._id!=id)
+      const newOrders = orders.filter((order) => order._id !== id);
       setOrders(newOrders);
     } catch (error) {
       console.error('Error deleting order:', error);
     }
+  };
+
+  // Toggle Accordion
+  const toggleAccordion = (id: any) => {
+    setOpenAccordion((prev) => (prev === id ? null : id));
   };
 
   return (
@@ -72,8 +81,12 @@ export default function Orders() {
           {/* Status Filter */}
           <div>
             <label className="block text-gray-600 mb-2 font-medium">Status</label>
-            <select className="w-full border border-gray-300 rounded px-3 py-2">
-              {filters.status.map((status) => (
+            <select
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="w-full border border-gray-300 rounded px-3 py-2"
+            >
+              {PageProps.filters.status.map((status) => (
                 <option key={status} value={status}>
                   {status}
                 </option>
@@ -85,7 +98,10 @@ export default function Orders() {
             <label className="block text-gray-600 mb-2 font-medium">Area</label>
             <input
               type="text"
+              value={areaFilter}
+              onChange={(e) => setAreaFilter(e.target.value)}
               className="w-full rounded px-3 py-2 border border-gray-300"
+              placeholder="Enter area"
             />
           </div>
           {/* Date Filter */}
@@ -93,12 +109,14 @@ export default function Orders() {
             <label className="block text-gray-600 mb-2 font-medium">Date</label>
             <input
               type="date"
+              value={dateFilter}
+              onChange={(e) => setDateFilter(e.target.value)}
               className="w-full border border-gray-300 rounded px-3 py-2"
-              defaultValue={filters.date}
             />
           </div>
         </div>
       </div>
+
       <div className="mb-6">
         <button
           onClick={() => setShowForm(!showForm)}
@@ -108,11 +126,12 @@ export default function Orders() {
         </button>
       </div>
       {showForm && <AddOrderForm />}
+
       {/* Orders List Section */}
       <div className="bg-white shadow-md rounded-lg p-4">
         <h2 className="text-lg font-semibold mb-4 text-gray-800">Orders</h2>
         <ul className="space-y-4">
-          {orders?.map((order) => (
+          {filteredOrders.map((order) => (
             <li key={order._id} className="p-4 border border-gray-200 rounded">
               <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
                 <div className="mb-3 md:mb-0">
@@ -159,7 +178,6 @@ export default function Orders() {
           ))}
         </ul>
       </div>
-      {/* <OrdersMap orders={orders} /> */}
     </div>
   );
 }

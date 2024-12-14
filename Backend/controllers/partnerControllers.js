@@ -28,8 +28,17 @@ export const createPartner=async(req,res)=>{
 export const editPartner=async(req,res)=>{
     try {
         const id=req.params.id
-        const partner=await PartnerModel.findByIdAndUpdate(id,req.body,{new:true})
-        res.status(201).json({
+        if(req.body.currentLoad){
+            const partner=await PartnerModel.findById(id)
+            partner.currentLoad+=req.body.currentLoad;
+            partner.save()
+            return res.status(201).json({
+                success:true,
+                partner
+            })
+        }
+        const partner=await PartnerModel.findByIdAndUpdate(id,req.body)        
+        return res.status(201).json({
             success:true,
             partner
         })

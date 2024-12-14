@@ -170,7 +170,7 @@ const AddOrderForm = () => {
             const patchResponse = await axios.patch(
               `${host}/api/partners/${result.partnerId}`,
               {
-                currentLoad: updatedPartners[idx!].currentLoad,
+                currentLoad: 1,
               }
             );
             console.log("Partner Edited: ", patchResponse.data);

@@ -12,6 +12,19 @@ export const getAllAssns=async(req,res)=>{
     }
 }
 
+export const deleteAssignmentController=async(req,res)=>{
+    try {
+        const id=req.params.id
+        const assignments=await AssignmentModel.findByIdAndDelete(id)
+        res.status(200).json({
+            assignments
+        })
+    } catch (error) {
+        console.log(error);   
+        res.status(500)     
+    }
+}
+
 export const postAssignment=async(req,res)=>{
     try {
         const {orderId,partnerId}=req.body;

@@ -19,6 +19,7 @@ export type DeliveryPartner = {
 };
 
 export type Assignment = {
+  _id:String
   orderId: string; partnerId:
   string; timeStamp: Date;
   status: 'success' | 'failed';
@@ -38,10 +39,19 @@ export type Order = {
     quantity: number;
     price: number;
       }[];
-    status: 'pending' | 'assigned' | 'picked' | 'delivered';
+    status: String;
    scheduledFor: string; // HH:mm 
    assignedTo?: string;
    // partner 
    totalAmount: number; createdAt:
    Date; updatedAt: Date;
    }
+
+export type AssignmentMetrics = {
+    totalAssigned: number;
+    successRate: number;
+    averageTime: number;
+    failureReasons: { reason:
+    string; count: number;
+    }[]; 
+}

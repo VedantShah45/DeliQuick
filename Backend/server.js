@@ -6,9 +6,13 @@ import colors from 'colors'
 import partnerRouter from './routes/partnerRoutes.js'
 import orderRouter from './routes/orderRoutes.js'
 import assignmentRouter from './routes/assignmentRoutes.js'
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 
 const corsOptions = {
-    origin: 'http://localhost:5173', // Specify the allowed origin
+    origin: process.env.FRONTEND_URL, // Specify the allowed origin
     methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH'], // Specify allowed HTTP methods
     credentials: true, // Allow cookies to be sent with requests
 };

@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   return (
-    <div className="bg-white shadow-md">
-      <nav className="flex justify-between items-center p-4 max-w-screen-xl mx-auto">
+    <div className="bg-white shadow-md fixed top-0 w-full">
+      <nav className="flex justify-start items-center p-4 max-w-screen-xl">
         {/* Logo Section */}
-        <div className="text-xl font-semibold text-gray-800 fixed left-2">
+        <div className="text-xl font-semibold text-gray-800 mr-4">
           DeliQuick
         </div>
 
         {/* Navigation Links */}
-        <div className="space-x-8 flex items-center">
+        <div className="space-x-4 flex items-center">
           <Link to="/" className="text-gray-700 hover:text-gray-900 transition-colors">Home</Link>
           <Link to="/orders" className="text-gray-700 hover:text-gray-900 transition-colors">Orders</Link>
           <Link to="/assignments" className="text-gray-700 hover:text-gray-900 transition-colors">Assignments</Link>

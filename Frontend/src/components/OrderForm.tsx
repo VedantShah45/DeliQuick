@@ -37,7 +37,7 @@ const AddOrderForm = () => {
 //   ];
 
   // Mock order coordinates (This would typically come from the form)
-  const orderCoords = { lat: 19.2403, lng: 73.1305 }; // Example coordinates for the order
+  // const orderCoords = { lat: 19.2403, lng: 73.1305 }; // Example coordinates for the order
 
   // Mock positions of partners
   // const partnerPositions = {
@@ -122,6 +122,7 @@ const AddOrderForm = () => {
   const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();  
     // Calculate the best partner for the order
+    const orderCoords=await getLatLngFromAddress(order.area)
     const result = assignDeliveryPartnerToOrder(orderCoords, partnerCoords!, deliveryPartners);
     if (result.partnerId) {    
       setPartnerDetails({...result});

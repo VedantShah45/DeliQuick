@@ -63,7 +63,7 @@ export  const getLatLngFromAddress = async (address: string) => {
       const location = data.results[0].geometry.location;
       return { lat: location.lat, lng: location.lng };
     } else {
-      console.error("Geocoding error: No results found");
+      console.error("Geocoding error for ",address);
       return { lat: 19.076, lng: 72.8777 }; // Default fallback
     }
   };

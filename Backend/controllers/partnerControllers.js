@@ -15,10 +15,10 @@ export const getAllPartners=async(req,res)=>{
 export const createPartner=async(req,res)=>{
     try {
         const newPartner=req.body
-        const partners=await PartnerModel.create(newPartner)
+        const partner=await PartnerModel.create(newPartner)
         res.status(201).json({
             success:true,
-            partners
+            partner
         })
     } catch (error) {
         console.log(error);        

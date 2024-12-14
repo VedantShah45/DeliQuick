@@ -8,6 +8,8 @@ import Navbar from './components/Navbar';
 import { LoadScript } from '@react-google-maps/api';
 
 const Google_Key = import.meta.env.VITE_GOOGLE_API_KEY;
+console.log(Google_Key);
+
 
 export default function App() {
   return (

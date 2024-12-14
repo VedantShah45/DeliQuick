@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddOrderForm from '../components/OrderForm';
 import { host } from '../apiRoutes';
@@ -17,7 +17,7 @@ const PageProps = {
 export default function Orders() {
   const [showForm, setShowForm] = useState<Boolean>(false);
   const [openAccordion, setOpenAccordion] = useState(null);
-  const { orders, setOrders } = useOrderStore();
+  const { orders , setOrders } = useOrderStore();
 
   // Filters State
   const [statusFilter, setStatusFilter] = useState("All");
@@ -42,9 +42,10 @@ export default function Orders() {
 
   // Update filteredOrders whenever orders or filters change
   useEffect(() => {
-    console.log(orders);    
-    if (Array.isArray(orders.orders)) {
-      const updatedFilteredOrders = orders.orders.filter((order) => {
+    console.log("Orders",orders);    
+    const orderNew:any=orders
+    if (Array.isArray(orderNew.orders)) {
+      const updatedFilteredOrders = orderNew.orders.filter((order:any) => {
         const matchesStatus = statusFilter === "All" || statusFilter.toLowerCase() === order.status; // Dummy "Pending" for demonstration
         const matchesArea = areaFilter === "" || order.customer.address.toLowerCase().includes(areaFilter.toLowerCase());
         // const matchesDate = dateFilter === "" || true; // Update when order.date exists        

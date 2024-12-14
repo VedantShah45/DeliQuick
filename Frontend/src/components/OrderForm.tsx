@@ -3,7 +3,7 @@ import { assignDeliveryPartnerToOrder, getLatLngFromAddress } from '../Helper/pa
 import axios from 'axios';
 import { host } from '../apiRoutes';
 import { usePartnerStore } from '../store/partnerStore';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer} from 'react-toastify';
 
 export type Order = {
   _id: string;

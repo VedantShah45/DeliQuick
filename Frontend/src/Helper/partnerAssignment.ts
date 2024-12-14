@@ -1,4 +1,3 @@
-import { del } from "framer-motion/client";
 import { DeliveryPartner } from "../types/partner";
 
 const Google_Key = import.meta.env.VITE_GOOGLE_API_KEY;

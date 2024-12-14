@@ -83,12 +83,12 @@ const PartnerForm: React.FC<PartnerFormProps> = ({ onSubmit,setFormOpen}) => {
     }
   };
 
-  const handleAreaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const area = e.target.value;
-    setAreas((prevAreas) =>
-      prevAreas.includes(area) ? prevAreas.filter((a) => a !== area) : [...prevAreas, area]
-    );
-  };
+  // const handleAreaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const area = e.target.value;
+  //   setAreas((prevAreas) =>
+  //     prevAreas.includes(area) ? prevAreas.filter((a) => a !== area) : [...prevAreas, area]
+  //   );
+  // };
 
   return (
     <div className="relative w-full max-w-lg mx-auto p-4 bg-white rounded-md">

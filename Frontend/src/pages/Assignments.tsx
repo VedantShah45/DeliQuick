@@ -1,4 +1,3 @@
-import React from 'react';
 import { Assignment, DeliveryPartner, Order } from '../types/partner';
 import { useAssignmentStore } from '../store/assignmentStore';
 import { usePartnerStore } from '../store/partnerStore';
@@ -8,7 +7,7 @@ import { useOrderStore } from '../store/orderStore';
 
 export default function Assignments() {
   const { assignments,setAssignments } = useAssignmentStore();
-  const { deliveryPartners,setDeliveryPartners } = usePartnerStore();
+  const { deliveryPartners} = usePartnerStore();
   const {orders,setOrders} = useOrderStore();
 
   const getPartnerStatus = (partner: DeliveryPartner) => {

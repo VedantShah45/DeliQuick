@@ -1,20 +1,20 @@
 // src/components/PartnerManagement.tsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import { DeliveryPartner } from '../types/partner';
 import { host } from '../apiRoutes';
 import PartnerForm from './partnerForm';
 import { usePartnerStore } from '../store/partnerStore';
-import { useOrderStore } from '../store/orderStore';
-import { useAssignmentStore } from '../store/assignmentStore';
+// import { useOrderStore } from '../store/orderStore';
+// import { useAssignmentStore } from '../store/assignmentStore';
 
 const PartnerManagement = () => {
   // const [partners, setPartners] = useState<DeliveryPartner[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading] = useState<boolean>(false);
   const [formOpen,setFormOpen] = useState<boolean>(false)
   const {setDeliveryPartners,deliveryPartners}=usePartnerStore();
-  const {setOrders}=useOrderStore();
-  const {setAssignments}=useAssignmentStore();
+  // const {setOrders}=useOrderStore();
+  // const {setAssignments}=useAssignmentStore();
   // Fetch partners from API
   // const fetchPartners = async () => {
   //   setLoading(true);

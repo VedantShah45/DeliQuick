@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { GoogleMap, LoadScript, MarkerF, Polyline, InfoWindow } from '@react-google-maps/api';
+import { GoogleMap, MarkerF, Polyline, InfoWindow } from '@react-google-maps/api';
 import { usePartnerStore } from '../store/partnerStore';
 import { useOrderStore } from '../store/orderStore';
 import { getLatLngFromAddress } from '../Helper/partnerAssignment';
@@ -41,7 +41,9 @@ const AssignmentsMap: React.FC = () => {
   const fetchOrders = async () => {
     try {
       const response = await axios.get(`${host}/api/orders`);
-      setOrders(response.data.orders);
+      // console.log(response.data.orders);  
+      const orders=response.data.orders    
+      setOrders(orders);
     } catch (error) {
       console.log('Error fetching orders:', error);
     }
@@ -61,7 +63,7 @@ const AssignmentsMap: React.FC = () => {
     fetchAssignments();
     fetchOrders();
   }, []);
-
+  
   useEffect(() => {
     const fetchCoordinates = async () => {
       const coords = await Promise.all(
@@ -71,7 +73,6 @@ const AssignmentsMap: React.FC = () => {
           const partnerCoords = partner
             ? await getLatLngFromAddress(partner.areas[0])
             : { lat: 0, lng: 0 };
-          console.log(`${partner?.name}'s Area : `, partner?.areas[0]);
           return {
             orderId: order._id,
             orderCoords,
@@ -122,6 +123,8 @@ const AssignmentsMap: React.FC = () => {
   };
 
   const metrics = calculateMetrics(assignments);
+
+  if(loading) return <div>Loading...</div>;
 
   return (
     <div className="min-h-screen bg-gray-100">

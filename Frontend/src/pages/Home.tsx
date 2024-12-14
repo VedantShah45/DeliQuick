@@ -91,7 +91,7 @@ const AssignmentsMap: React.FC = () => {
   const calculateMetrics = (assignments: Assignment[]): AssignmentMetrics => {
     const totalAssigned = assignments.length;
     const successCount = assignments.filter((assignment) => assignment.status === 'success').length;
-    const successRate = totalAssigned > 0 ? (successCount / totalAssigned) * 100 : 0;
+    const successRate = totalAssigned > 0 ? parseFloat(((successCount / totalAssigned) * 100).toFixed(2)) : 0;
 
     const failedAssignments = assignments.filter((assignment) => assignment.status === 'failed');
     const failureReasons: { reason: string; count: number }[] = [];

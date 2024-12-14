@@ -12,7 +12,7 @@ dotenv.config()
 
 
 const corsOptions = {
-    origin: process.env.FRONTEND_URl, // Specify the allowed origin
+    origin: [process.env.FRONTEND_URl,'http://localhost:5173'], // Specify the allowed origin
     methods: ['GET', 'POST', 'PUT', 'DELETE','PATCH'], // Specify allowed HTTP methods
     credentials: true, // Allow cookies to be sent with requests
 };

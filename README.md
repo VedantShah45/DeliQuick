@@ -85,7 +85,7 @@ npm start
 ```
 
 ### 5. Open the app in your browser
-Go to `http://localhost:3000` to view the app in action.
+Go to `http://localhost:5173` to view the app in action.
 
 ## Usage
 

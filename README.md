@@ -63,7 +63,6 @@ Create a `.env` file in both the frontend and backend directories and add the re
 #### For Backend:
 ```env
 MONGODB_URI=your_mongodb_connection_string
-GOOGLE_API_KEY=your_google_maps_api_key
 ```
 
 #### For Frontend:
@@ -86,7 +85,7 @@ npm start
 ```
 
 ### 5. Open the app in your browser
-Go to `http://localhost:3000` to view the app in action.
+Go to `http://localhost:5173` to view the app in action.
 
 ## Usage
 

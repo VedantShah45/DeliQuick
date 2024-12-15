@@ -129,7 +129,7 @@ const AssignmentsMap: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Assignment Metrics Card */}
-      <section className="p-8 mt-8 bg-white shadow-lg">
+      <section className="p-8 mt-8 bg-white shadow-lg overflow-x-auto">
         <h3 className="text-xl font-semibold text-gray-800 mb-4">Key Assignment Metrics</h3>
         <div className="flex space-x-8">
           <div className="bg-blue-50 p-4 rounded-lg shadow-sm w-64">
@@ -160,9 +160,9 @@ const AssignmentsMap: React.FC = () => {
 
       <h2 className="text-xl font-semibold p-4">Assignments Dashboard</h2>
 
-      <div className="flex p-8">
-        {/* Sidebar */}
-        <aside className="w-80 bg-white p-6 rounded-lg shadow-lg mr-8">
+      <div className="flex-wrap sm:flex p-8">
+        {/* Sidebar */}        
+        <div className="w-80 bg-white p-6 rounded-lg shadow-lg mr-8">
           <h2 className="text-xl font-semibold text-gray-800 mb-4">Delivery Partners</h2>
           {deliveryPartners.map((partner) => (
             <div className="bg-white p-4 rounded-lg shadow-sm mb-3" key={partner._id}>
@@ -178,7 +178,7 @@ const AssignmentsMap: React.FC = () => {
               </p>
             </div>
           ))}
-        </aside>
+        </div>
 
         {/* Map Container */}
         <section className="flex-1 h-[500px] rounded-lg shadow-lg">
@@ -245,9 +245,7 @@ const AssignmentsMap: React.FC = () => {
             ))}
           </GoogleMap>
         </section>
-      </div>
-
-      
+      </div>      
     </div>
   );
 };

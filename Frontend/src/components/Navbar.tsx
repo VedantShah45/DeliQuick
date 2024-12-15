@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 export default function Navbar() {
   return (
-    <div className="bg-white shadow-md fixed top-0 w-full">
+    <div className="bg-white shadow-md fixed top-0 w-full overflow-x-auto px-2">
       <nav className="flex justify-start items-center p-4 max-w-screen-xl">
         {/* Logo Section */}
         <div className="text-xl font-semibold text-gray-800 mr-4">

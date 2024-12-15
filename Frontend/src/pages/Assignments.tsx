@@ -121,13 +121,13 @@ export default function Assignments() {
               <div className="mt-4 flex space-x-4">
                 <button
                   onClick={() => handleComplete(assignment._id,assignment.orderId,assignment.partnerId)}
-                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+                  className="cursor-pointer px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                 >
                   Complete
                 </button>
                 <button
                   onClick={() => handleCancel(assignment.orderId)}
-                  className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                  className="cursor-pointer px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                 >
                   Cancel
                 </button>

@@ -21,7 +21,7 @@ export default function App() {
         <div className='h-screen fixed left-0 w-[150px] '>
           <Sidebar />
         </div>
-        <div className='ml-[155px] h-full'>
+        <div className='sm:ml-[155px] ml-0 h-full'>
           <Routes>
             <Route path="/" element={<Home/>} />
             <Route path="/orders" element={<Orders/>} />

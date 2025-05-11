@@ -40,3 +40,53 @@ The entire application (frontend, backend, and database) is containerized using 
 #### To build and run containers:
 ```bash
 docker-compose up --build
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./Frontend  # Path to your frontend directory
+    ports:
+      - "5173:5173"  # Expose the frontend on port 5173
+    volumes:
+      - ./frontend:/app 
+    environment:
+      - VITE_GOOGLE_API_KEY= #Your API key from the google cloud console
+    networks:
+      - app-network
+    depends_on:
+      - nginx  # Ensure nginx is started before the frontend
+
+  backend:
+    build:
+      context: ./backend  # Path to your backend directory
+    ports:
+      - "3000:3000"  # Expose backend on port 3000
+      - "3001:3001"  # Expose additional backend instances if required
+      - "3002:3002"
+    volumes:
+      - ./backend:/app  # Volume to mount the backend directory into the container
+    networks:
+      - app-network
+    environment:
+      - MONGO_URI=# Your mongo uri
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-container
+    build:
+      context: .  # This assumes the nginx.conf is at the root of the project
+      dockerfile: Dockerfile  # Ensure you have a Dockerfile for nginx setup
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf  # Mount the NGINX configuration file
+    ports:
+      - "8080:80"  # Expose NGINX on port 8080
+    networks:
+      - app-network
+    depends_on:
+      - backend
+
+networks:
+  app-network:
+    driver: bridge
+

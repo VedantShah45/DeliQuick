@@ -37,17 +37,16 @@ Welcome to **DeliQuick**, a robust and efficient **Delivery Fleet Management** s
 ### 1. **Dockerization**
 The entire application (frontend, backend, and database) is containerized using Docker for simplified deployment.
 
-#### To build and run containers:
-```bash
-docker-compose up --build
+#### Modify the docker-compose.yml:
+````bash
 version: '3.8'
 
 services:
   frontend:
     build:
-      context: ./Frontend  # Path to your frontend directory
+      context: ./Frontend 
     ports:
-      - "5173:5173"  # Expose the frontend on port 5173
+      - "5173:5173"  
     volumes:
       - ./frontend:/app 
     environment:
@@ -55,32 +54,32 @@ services:
     networks:
       - app-network
     depends_on:
-      - nginx  # Ensure nginx is started before the frontend
+      - nginx  
 
   backend:
     build:
-      context: ./backend  # Path to your backend directory
+      context: ./backend  
     ports:
-      - "3000:3000"  # Expose backend on port 3000
-      - "3001:3001"  # Expose additional backend instances if required
+      - "3000:3000"  
+      - "3001:3001"  
       - "3002:3002"
     volumes:
-      - ./backend:/app  # Volume to mount the backend directory into the container
+      - ./backend:/app  
     networks:
       - app-network
     environment:
-      - MONGO_URI=# Your mongo uri
+      - MONGO_URI= #Your mongo uri
 
   nginx:
     image: nginx:latest
     container_name: nginx-container
     build:
-      context: .  # This assumes the nginx.conf is at the root of the project
-      dockerfile: Dockerfile  # Ensure you have a Dockerfile for nginx setup
+      context: . 
+      dockerfile: Dockerfile 
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf  # Mount the NGINX configuration file
+      - ./nginx.conf:/etc/nginx/nginx.conf  
     ports:
-      - "8080:80"  # Expose NGINX on port 8080
+      - "8080:80"  
     networks:
       - app-network
     depends_on:
@@ -90,3 +89,7 @@ networks:
   app-network:
     driver: bridge
 
+````
+#### To build and run containers:
+```bash
+docker-compose up --build

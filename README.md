@@ -29,80 +29,14 @@ Welcome to **DeliQuick**, a robust and efficient **Delivery Fleet Management** s
 - **Frontend**: React.js, Zustand, TailwindCSS 
 - **Backend**: Node.js, Express.js
 - **Database**: MongoDB 
-- **API**: Google Maps API for real-time order tracking, Google Geocoding API for co-ordinate generation 
+- **API**: Google Maps API for real-time order tracking, Google Geocoding API for coordinate generation 
 - **Haversine Formula**: For calculating optimal distances between order and partner locations
 
-## Installation
+## Docker & Nginx Integration
 
-### 1. Clone the repository
+### 1. **Dockerization**
+The entire application (frontend, backend, and database) is containerized using Docker for simplified deployment.
+
+#### To build and run containers:
 ```bash
-git clone https://github.com/yourusername/deliquick.git
-cd deliquick
-```
-
-### 2. Install dependencies
-
-#### Backend
-Go to the backend directory and install dependencies:
-```bash
-cd backend
-npm install
-```
-
-#### Frontend
-Go to the frontend directory and install dependencies:
-```bash
-cd frontend
-npm install
-```
-
-### 3. Set up environment variables
-
-Create a `.env` file in both the frontend and backend directories and add the required environment variables:
-
-#### For Backend:
-```env
-MONGODB_URI=your_mongodb_connection_string
-```
-
-#### For Frontend:
-```env
-REACT_APP_GOOGLE_API_KEY=your_google_maps_api_key
-```
-
-### 4. Start the server
-
-#### Backend:
-```bash
-cd backend
-npm run dev
-```
-
-#### Frontend:
-```bash
-cd frontend
-npm start
-```
-
-### 5. Open the app in your browser
-Go to `http://localhost:5173` to view the app in action.
-
-## Usage
-
-- **Partner Creation**: Navigate to the "Partners" section to add new delivery partners. Assign relevant details such as name, phone number, areas of operation, and shift timings.
-- **Order Management**: In the "Orders" section, create new orders by providing customer details, item list, and delivery information.
-- **Order Assignment**: The system will automatically calculate the optimal delivery partner based on proximity using the Haversine Distance formula.
-- **Order Tracking**: View real-time tracking of deliveries using the Google Maps integration. Track orders by selecting them from the list and visualizing the path on the map.
-
-## Contributing
-
-Contributions are welcome! To contribute, please follow these steps:
-
-1. Fork the repository
-2. Clone your fork
-3. Create a new branch
-4. Make your changes
-5. Commit and push your changes
-6. Create a pull request
-
-
+docker-compose up --build

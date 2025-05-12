@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "nodemon server.js",
+    "bash": "(npx cross-env PORT=3000 nodemon server.js) & (npx cross-env PORT=3001 nodemon server.js) & (npx cross-env PORT=3002 nodemon server.js) &"
   },
   "author": "",
   "license": "ISC",
@@ -13,6 +14,7 @@
   "dependencies": {
     "colors": "^1.4.0",
     "cors": "^2.8.5",
+    "csv-writer": "^1.6.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.1",
     "mongoose": "^8.8.3",

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -12,10 +12,12 @@
   "dependencies": {
     "@heroicons/react": "^2.2.0",
     "@react-google-maps/api": "^2.20.3",
+    "@rollup/rollup-linux-x64-musl": "^4.40.2",
     "axios": "^1.7.8",
     "dotenv": "^16.4.7",
     "framer-motion": "^11.13.5",
     "google-maps-react-markers": "^2.0.11",
+    "lucide-react": "^0.509.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.2",

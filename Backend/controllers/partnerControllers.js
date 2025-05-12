@@ -1,4 +1,5 @@
 import { PartnerModel } from "../models/partnerModel.js";
+import { runCSVWorker } from "../workers/runWorkers.js";
 
 export const getAllPartners=async(req,res)=>{
     try {
@@ -60,4 +61,19 @@ export const deletePartner=async(req,res)=>{
     }
 }
 
+export const getDeliveryMetrics=async (req, res) => {
+  try {
+    // This offloads work to a separate thread
+    const filePath = await runCSVWorker();
 
+    res.download(filePath, 'partner_metrics_report.csv', (err) => {
+      if (err) {
+        console.error('File send error:', err);
+        res.status(500).send('Failed to download file.');
+      }
+    });
+  } catch (err) {
+    console.error('Error generating report:', err);
+    res.status(500).send('Error generating CSV.');
+  }
+}

@@ -1,1 +1,1 @@
-export const host="https://deliquick.onrender.com"
+export const host="http://localhost:8080"

@@ -7,6 +7,7 @@ import { delIcon } from '../assets';
 import { Assignment, AssignmentMetrics, DeliveryPartner, Order } from '../types/partner';
 import axios from 'axios';
 import { host } from '../apiRoutes';
+import { Download } from 'lucide-react';
 import { useAssignmentStore } from '../store/assignmentStore';
 
 type Coordinates = {
@@ -122,6 +123,30 @@ const AssignmentsMap: React.FC = () => {
     };
   };
 
+  const handleDownload = async () => {
+    try {
+      const res = await axios.get(`${host}/api/partners/metrics`, {
+        responseType: 'blob' // Important: treat response as binary data
+      });
+
+      const blob = new Blob([res.data], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'partner_metrics_report.csv'; // Desired file name
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      // Optional: Clean up the object URL after use
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Download failed:', err);
+      alert('Failed to download report');
+    }
+  };
+
   const metrics = calculateMetrics(assignments);
 
   if(loading) return <div>Loading...</div>;
@@ -130,7 +155,17 @@ const AssignmentsMap: React.FC = () => {
     <div className="min-h-screen bg-gray-100">
       {/* Assignment Metrics Card */}
       <section className="p-8 mt-8 bg-white shadow-lg overflow-x-auto">
-        <h3 className="text-xl font-semibold text-gray-800 mb-4">Key Assignment Metrics</h3>
+        <div className="flex items-center mb-4">
+          <h3 className="text-xl font-semibold text-gray-800 px-3">Key Assignment Metrics</h3>
+          <button 
+            className="text-gray-600 hover:text-blue-600"
+            onClick={handleDownload} // Add this handler to trigger CSV download
+            title="Download report"
+          >
+            <Download size={20} />
+          </button>
+        </div>
+
         <div className="flex space-x-8">
           <div className="bg-blue-50 p-4 rounded-lg shadow-sm w-64">
             <h4 className="text-lg font-semibold">Total Assignments</h4>
@@ -145,17 +180,19 @@ const AssignmentsMap: React.FC = () => {
             <p className="text-3xl font-bold">{metrics.averageTime.toFixed(2)}</p>
           </div>
         </div>
-        {metrics.failureReasons.length>0 && <div className="mt-6">
-          <h4 className="text-lg font-semibold mb-4">Failure Reasons</h4>
-          <ul className="space-y-2">
-            {metrics.failureReasons.map((failure, index) => (
-              <li key={index} className="flex justify-between">
-                <span>{failure.reason}</span>
-                <span className="font-bold">{failure.count}</span>
-              </li>
-            ))}
-          </ul>
-        </div>}
+        {metrics.failureReasons.length > 0 && (
+          <div className="mt-6">
+            <h4 className="text-lg font-semibold mb-4">Failure Reasons</h4>
+            <ul className="space-y-2">
+              {metrics.failureReasons.map((failure, index) => (
+                <li key={index} className="flex justify-between">
+                  <span>{failure.reason}</span>
+                  <span className="font-bold">{failure.count}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
       </section>
 
       <h2 className="text-xl font-semibold p-4">Assignments Dashboard</h2>
